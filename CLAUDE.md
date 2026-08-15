@@ -15,12 +15,17 @@ No test suite is configured.
 
 ## Architecture
 
-This is a React 19 + Vite single-page app. All application logic lives in a single component: `src/App.jsx`.
+This is a React 19 + Vite single-page app with four components:
 
-**State shape** — `transactions` is an array of `{ id, description, amount, type, category, date }` objects. `amount` is stored as a string (form input value), which causes arithmetic bugs in the summary calculations (`totalIncome`, `totalExpenses`, `balance` use `reduce` but get string concatenation instead of addition).
+- **`App`** — holds `transactions` state and `categories`. Passes data down; no other logic.
+- **`Summary`** (`src/Summary.jsx`) — receives `transactions`, computes `totalIncome`, `totalExpenses`, and `balance` internally.
+- **`TransactionForm`** (`src/TransactionForm.jsx`) — owns its own form field state (`description`, `amount`, `type`, `category`). Calls `onAdd(transaction)` prop on submit.
+- **`TransactionList`** (`src/TransactionList.jsx`) — receives `transactions` and `categories`, owns filter state (`filterType`, `filterCategory`), derives the filtered list internally.
 
-**Data flow** — no external state library, no persistence (data resets on page refresh). Filtering is derived inline from `transactions` state on every render.
+**State shape** — `transactions` is an array of `{ id, description, amount, type, category, date }` where `amount` is a number.
 
-**Categories** — hardcoded array: `["food", "housing", "utilities", "transport", "entertainment", "salary", "other"]`.
+**Data flow** — no external state library, no persistence (data resets on page refresh).
 
-This project is a course starter intentionally containing bugs and rough UI — fixes are applied as exercises.
+**Categories** — hardcoded array in `App`: `["food", "housing", "utilities", "transport", "entertainment", "salary", "other"]`, passed as a prop to `TransactionForm` and `TransactionList`.
+
+This project is a course starter — fixes and refactors are applied as exercises.
