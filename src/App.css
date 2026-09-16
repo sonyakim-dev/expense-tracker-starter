@@ -95,6 +95,15 @@ form button {
   font-size: 14px;
 }
 
+.delete-btn {
+  padding: 6px 14px;
+  background: #c0392b;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+}
+
 .transactions {
   margin-bottom: 24px;
 }
