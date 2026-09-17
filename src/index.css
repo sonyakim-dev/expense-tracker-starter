@@ -1,3 +1,38 @@
+:root {
+  --ink: #14212f;
+  --ink-raised: #1c2f40;
+  --ink-line: #2d4356;
+  --ink-text: #eae3d2;
+  --ink-text-muted: #9fb0bd;
+
+  --paper: #f6f1e4;
+  --paper-line: #ddd2b5;
+  --paper-text: #23201a;
+  --paper-text-muted: #746c5a;
+
+  --brass: #b98b36;
+  --brass-deep: #8f6a24;
+  --income: #1f7a54;
+  --expense: #a13d2b;
+
+  --cat-food: #c0862b;
+  --cat-housing: #2e6fa6;
+  --cat-utilities: #b23a2e;
+  --cat-transport: #1f8f5c;
+  --cat-entertainment: #8b3f86;
+  --cat-salary: #0496ad;
+  --cat-other: #a85c1e;
+
+  --font-display: "IBM Plex Serif", Georgia, serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-pill: 999px;
+
+  color-scheme: light;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -5,7 +40,28 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background-color: #ffffff;
-  color: #333;
+  font-family: var(--font-body);
+  background-color: var(--ink);
+  color: var(--ink-text);
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

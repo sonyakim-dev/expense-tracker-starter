@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { categoryColor } from "./categoryColors";
 
 function TransactionList({ transactions, categories, onDelete }) {
   const [filterType, setFilterType] = useState("all");
@@ -22,13 +23,17 @@ function TransactionList({ transactions, categories, onDelete }) {
     <div className="transactions">
       <h2>Transactions</h2>
       <div className="filters">
-        <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
-          <option value="all">All Types</option>
+        <select value={filterType} onChange={(e) => setFilterType(e.target.value)} aria-label="Filter by type">
+          <option value="all">All types</option>
           <option value="income">Income</option>
           <option value="expense">Expense</option>
         </select>
-        <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
-          <option value="all">All Categories</option>
+        <select
+          value={filterCategory}
+          onChange={(e) => setFilterCategory(e.target.value)}
+          aria-label="Filter by category"
+        >
+          <option value="all">All categories</option>
           {categories.map((cat) => (
             <option key={cat} value={cat}>
               {cat}
@@ -37,34 +42,47 @@ function TransactionList({ transactions, categories, onDelete }) {
         </select>
       </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Amount</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filtered.map((t) => (
-            <tr key={t.id}>
-              <td>{t.date}</td>
-              <td>{t.description}</td>
-              <td>{t.category}</td>
-              <td className={t.type === "income" ? "income-amount" : "expense-amount"}>
-                {t.type === "income" ? "+" : "-"}${t.amount}
-              </td>
-              <td>
-                <button className="delete-btn" onClick={() => handleDelete(t)} aria-label={`Delete ${t.description}`}>
-                  Delete
-                </button>
-              </td>
+      {filtered.length === 0 ? (
+        <p className="empty-state">No transactions match these filters yet.</p>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th className="col-amount">Amount</th>
+              <th className="col-actions"></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filtered.map((t) => (
+              <tr key={t.id}>
+                <td className="col-date">{t.date}</td>
+                <td>{t.description}</td>
+                <td>
+                  <span className="category-tag">
+                    <span className="category-dot" style={{ backgroundColor: categoryColor(t.category) }} />
+                    {t.category}
+                  </span>
+                </td>
+                <td className={`col-amount ${t.type === "income" ? "income-amount" : "expense-amount"}`}>
+                  {t.type === "income" ? "+" : "−"}${t.amount.toLocaleString()}
+                </td>
+                <td className="col-actions">
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDelete(t)}
+                    aria-label={`Delete ${t.description}`}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

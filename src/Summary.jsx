@@ -4,20 +4,22 @@ function Summary({ transactions }) {
   const balance = totalIncome - totalExpenses;
 
   return (
-    <div className="summary">
-      <div className="summary-card">
-        <h3>Income</h3>
-        <p className="income-amount">${totalIncome}</p>
+    <section className="summary">
+      <div className="balance-hero">
+        <p className="balance-amount">${balance.toLocaleString()}</p>
+        <p className="balance-label">current balance</p>
       </div>
-      <div className="summary-card">
-        <h3>Expenses</h3>
-        <p className="expense-amount">${totalExpenses}</p>
-      </div>
-      <div className="summary-card">
-        <h3>Balance</h3>
-        <p className="balance-amount">${balance}</p>
-      </div>
-    </div>
+      <dl className="summary-stats">
+        <div className="summary-stat">
+          <dt>Income</dt>
+          <dd className="income-amount">${totalIncome.toLocaleString()}</dd>
+        </div>
+        <div className="summary-stat">
+          <dt>Expenses</dt>
+          <dd className="expense-amount">${totalExpenses.toLocaleString()}</dd>
+        </div>
+      </dl>
+    </section>
   );
 }
 
