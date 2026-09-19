@@ -1,22 +1,19 @@
 import { useState } from "react";
 import { categoryColor } from "./categoryColors";
+import { CATEGORIES } from "./categories";
 
-function TransactionList({ transactions, categories, onDelete }) {
+function TransactionList({ transactions, onDelete }) {
   const [filterType, setFilterType] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
+  const [pendingDeleteId, setPendingDeleteId] = useState(null);
 
-  let filtered = transactions;
-  if (filterType !== "all") {
-    filtered = filtered.filter((t) => t.type === filterType);
-  }
-  if (filterCategory !== "all") {
-    filtered = filtered.filter((t) => t.category === filterCategory);
-  }
+  const filtered = transactions
+    .filter((t) => filterType === "all" || t.type === filterType)
+    .filter((t) => filterCategory === "all" || t.category === filterCategory);
 
-  const handleDelete = (t) => {
-    if (window.confirm(`Delete "${t.description}"?`)) {
-      onDelete(t.id);
-    }
+  const confirmDelete = (id) => {
+    onDelete(id);
+    setPendingDeleteId(null);
   };
 
   return (
@@ -34,7 +31,7 @@ function TransactionList({ transactions, categories, onDelete }) {
           aria-label="Filter by category"
         >
           <option value="all">All categories</option>
-          {categories.map((cat) => (
+          {CATEGORIES.map((cat) => (
             <option key={cat} value={cat}>
               {cat}
             </option>
@@ -70,13 +67,24 @@ function TransactionList({ transactions, categories, onDelete }) {
                   {t.type === "income" ? "+" : "−"}${t.amount.toLocaleString()}
                 </td>
                 <td className="col-actions">
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDelete(t)}
-                    aria-label={`Delete ${t.description}`}
-                  >
-                    Delete
-                  </button>
+                  {pendingDeleteId === t.id ? (
+                    <>
+                      <button className="delete-btn delete-btn--confirm" onClick={() => confirmDelete(t.id)}>
+                        Confirm
+                      </button>
+                      <button className="delete-btn" onClick={() => setPendingDeleteId(null)}>
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      className="delete-btn"
+                      onClick={() => setPendingDeleteId(t.id)}
+                      aria-label={`Delete ${t.description}`}
+                    >
+                      Delete
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

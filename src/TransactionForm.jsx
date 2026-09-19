@@ -1,19 +1,21 @@
 import { useState } from "react";
+import { CATEGORIES } from "./categories";
 
-function TransactionForm({ categories, onAdd }) {
+function TransactionForm({ onAdd }) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("expense");
-  const [category, setCategory] = useState("food");
+  const [category, setCategory] = useState(CATEGORIES[0]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!description || !amount) return;
+    const parsed = parseFloat(amount);
+    if (!description.trim() || isNaN(parsed) || parsed <= 0) return;
 
     onAdd({
-      id: Date.now(),
-      description,
-      amount: parseFloat(amount),
+      id: crypto.randomUUID(),
+      description: description.trim(),
+      amount: parsed,
       type,
       category,
       date: new Date().toISOString().split("T")[0],
@@ -22,7 +24,7 @@ function TransactionForm({ categories, onAdd }) {
     setDescription("");
     setAmount("");
     setType("expense");
-    setCategory("food");
+    setCategory(CATEGORIES[0]);
   };
 
   return (
@@ -40,6 +42,8 @@ function TransactionForm({ categories, onAdd }) {
           type="number"
           placeholder="Amount"
           aria-label="Amount"
+          min="0.01"
+          step="0.01"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
@@ -48,7 +52,7 @@ function TransactionForm({ categories, onAdd }) {
           <option value="expense">Expense</option>
         </select>
         <select value={category} onChange={(e) => setCategory(e.target.value)} aria-label="Category">
-          {categories.map((cat) => (
+          {CATEGORIES.map((cat) => (
             <option key={cat} value={cat}>
               {cat}
             </option>
